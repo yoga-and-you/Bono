@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yoga & You — Bon</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  min-height: 100vh;
+  background: #b8bfaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Raleway', sans-serif;
+  padding: 28px 20px;
+}
+
+.card {
+  width: 100%;
+  max-width: 390px;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #f0f1ea;
+  position: relative;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.85) inset,
+    0 32px 80px rgba(30,50,15,0.22),
+    0 8px 20px rgba(30,50,15,0.1);
+}
+
+.leaves-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.card-header {
+  position: relative;
+  padding: 38px 32px 28px;
+  background: #e4e7da;
+  border-bottom: 1px solid rgba(160,175,120,0.2);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(100,140,50,0.14);
+  pointer-events: none;
+}
+
+.r1 { width:320px; height:320px; top:-140px; right:-120px; }
+.r2 { width:230px; height:230px; top:-95px; right:-75px; }
+.r3 { width:140px; height:140px; top:-50px; right:-30px; }
+
+.sun-blob {
+  position: absolute;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,200,30,0.2), transparent 68%);
+  top: -60px; right: -40px;
+  pointer-events: none;
+}
+
+.header-content { position: relative; z-index: 2; }
+
+.location-row { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; }
+
+.loc-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #e8c820;
+  box-shadow: 0 0 0 2px rgba(232,200,32,0.25);
+}
+
+.loc-text {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: #5a7835;
+}
+
+.brand {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic; font-size: 54px;
+  color: #1c2e0c; line-height: 0.88; letter-spacing: -1.5px;
+}
+
+.brand-amp { color: #e8c820; font-style: normal; text-shadow: 0 0 20px rgba(232,200,32,0.3); }
+
+.tagline-row { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.tagline-line { flex: 1; height: 1px; background: linear-gradient(90deg, rgba(90,120,50,0.25), transparent); }
+.tagline { font-size: 8px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: rgba(28,46,12,0.32); white-space: nowrap; }
+
+.accent-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #c8a010, #f0d830 40%, #e8c010 70%, #b89010);
+  position: relative; z-index: 1;
+}
+
+.card-body { padding: 26px 32px 26px; position: relative; z-index: 1; }
+
+.top-strip {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 22px; padding-bottom: 18px;
+  border-bottom: 1px solid rgba(100,140,50,0.12);
+}
+
+.pills { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.pill {
+  background: #1c2e0c; color: #e8c820;
+  font-size: 8px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 7px 13px; border-radius: 20px;
+}
+
+.pill-outline {
+  background: transparent; color: #5a7835;
+  border: 1.5px solid rgba(90,120,53,0.3);
+}
+
+.price {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic; font-size: 36px;
+  color: #c8a010; line-height: 1;
+  text-shadow: 0 0 20px rgba(200,160,16,0.2);
+}
+.price sup { font-size: 16px; vertical-align: super; font-family: 'Raleway', sans-serif; font-style: normal; font-weight: 700; }
+
+.field-label { font-size: 8px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(28,46,12,0.3); margin-bottom: 5px; }
+
+.name-wrap {
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1.5px solid rgba(90,120,53,0.22);
+  padding-bottom: 7px; margin-bottom: 24px;
+  transition: border-color 0.2s;
+}
+.name-wrap:focus-within { border-color: rgba(140,180,50,0.6); }
+
+#client-name {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic; font-size: 28px; color: #1c2e0c;
+  background: transparent; border: none; outline: none;
+  width: 100%; caret-color: #e8c820;
+}
+#client-name::placeholder { color: rgba(28,46,12,0.2); font-style: italic; }
+
+.edit-icon { font-size: 13px; flex-shrink: 0; opacity: 0.4; }
+
+.sess-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+
+.sess-label { font-size: 8px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(28,46,12,0.28); }
+
+.mode-toggle {
+  display: flex; background: rgba(28,46,12,0.06);
+  border: 1px solid rgba(28,46,12,0.1); border-radius: 6px; overflow: hidden;
+}
+
+.mode-btn {
+  padding: 5px 10px; font-family: 'Raleway', sans-serif;
+  font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  border: none; background: transparent; color: rgba(28,46,12,0.28); cursor: pointer; transition: all 0.2s;
+}
+.mode-btn.active { background: #1c2e0c; color: #e8c820; }
+
+.sessions-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 22px; }
+
+.session-item { cursor: pointer; }
+
+.session-circle {
+  aspect-ratio: 1; border-radius: 50%;
+  border: 1.5px solid rgba(90,120,53,0.22);
+  background: rgba(255,255,255,0.8);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.25s; box-shadow: 0 2px 10px rgba(30,55,10,0.08);
+}
+.session-item:hover .session-circle { border-color: rgba(232,200,32,0.6); background: rgba(232,200,32,0.08); transform: scale(1.07); }
+.session-circle.used { background: #1c2e0c; border-color: #1c2e0c; box-shadow: 0 4px 16px rgba(28,46,12,0.28); }
+
+.session-num { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 22px; color: rgba(28,46,12,0.16); line-height: 1; }
+.session-circle.used .session-num { display: none; }
+.check-icon { display: none; color: #e8c820; font-size: 20px; font-weight: 900; }
+.session-circle.used .check-icon { display: block; }
+
+.session-date { font-size: 8px; font-weight: 700; color: rgba(28,46,12,0.25); text-align: center; margin-top: 5px; min-height: 11px; }
+.session-date.has-date { color: #8ab030; }
+
+.card-bottom {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-top: 18px; border-top: 1px solid rgba(90,120,53,0.12); margin-bottom: 22px;
+}
+
+.counter-num {
+  font-family: 'DM Serif Display', serif; font-style: italic; font-size: 62px;
+  color: #1c2e0c; line-height: 1; letter-spacing: -2px; display: inline-block; position: relative;
+}
+.counter-num::after {
+  content: ''; position: absolute; bottom: 7px; left: 0; right: 0;
+  height: 5px; border-radius: 3px; background: #e8c820; opacity: 0.65;
+}
+.counter-label { font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(28,46,12,0.28); margin-top: 6px; }
+
+.reset-btn {
+  font-size: 8px; color: rgba(28,46,12,0.22); background: none; border: none; cursor: pointer;
+  font-family: 'Raleway', sans-serif; letter-spacing: 1.5px; text-transform: uppercase;
+  display: none; text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s;
+}
+.reset-btn:hover { color: #5a7835; }
+
+/* ── PAYMENT SECTION ── */
+.pay-section { margin-bottom: 0; }
+
+.pay-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(28,46,12,0.28); margin-bottom: 10px; text-align: center;
+}
+
+.pay-options { display: flex; flex-direction: column; gap: 10px; }
+
+.pay-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 16px;
+  border-radius: 14px; font-family: 'Raleway', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none; text-align: center; transition: all 0.25s;
+  position: relative; overflow: hidden; cursor: pointer; border: none;
+}
+
+.pay-btn-icon { font-size: 18px; flex-shrink: 0; }
+
+/* Revolut */
+.pay-revolut {
+  background: #1c2e0c; color: #e8c820;
+  box-shadow: 0 8px 28px rgba(28,46,12,0.22);
+}
+.pay-revolut:hover { background: #111c06; transform: translateY(-1px); box-shadow: 0 12px 36px rgba(28,46,12,0.3); }
+
+/* Bizum */
+.pay-bizum {
+  background: #f0f1ea; color: #1c2e0c;
+  border: 1.5px solid rgba(90,120,53,0.25);
+  box-shadow: 0 4px 14px rgba(28,46,12,0.08);
+}
+.pay-bizum:hover { background: #e8eade; transform: translateY(-1px); border-color: rgba(90,120,53,0.45); }
+
+/* Transferencia */
+.pay-transfer {
+  background: rgba(90,120,53,0.1);
+  color: #3a6018;
+  border: 1.5px solid rgba(90,120,53,0.35);
+  box-shadow: 0 4px 14px rgba(28,46,12,0.08);
+}
+.pay-transfer:hover { border-color: rgba(90,120,53,0.6); background: rgba(90,120,53,0.16); transform: translateY(-1px); }
+
+.pay-sub-text {
+  text-align: center; font-size: 8px; font-weight: 600;
+  color: rgba(28,46,12,0.22); margin-top: 12px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+
+/* Paid badge */
+.paid-badge {
+  display: none; text-align: center; padding: 4px 0 4px;
+}
+.paid-badge-inner {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(90,120,53,0.1);
+  border: 1.5px solid rgba(90,120,53,0.25);
+  border-radius: 30px; padding: 12px 24px;
+}
+.paid-badge-text { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #3a6018; }
+.paid-badge-sub { font-size: 8px; font-weight: 600; color: rgba(28,46,12,0.3); margin-top: 8px; letter-spacing: 1px; text-transform: uppercase; text-align: center; }
+
+/* Bizum modal */
+.bizum-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,25,8,0.65); backdrop-filter: blur(14px);
+  z-index: 100; align-items: flex-end; justify-content: center; padding: 20px;
+}
+.bizum-modal-overlay.open { display: flex; }
+.bizum-modal {
+  background: #f0f1ea; border-radius: 28px; padding: 30px 28px 34px;
+  width: 100%; max-width: 390px;
+  box-shadow: 0 -8px 40px rgba(20,35,8,0.18);
+}
+.bizum-title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 24px; color: #1c2e0c; margin-bottom: 6px; }
+.bizum-sub { font-size: 11px; color: rgba(28,46,12,0.4); margin-bottom: 22px; }
+.bizum-info {
+  background: rgba(90,120,53,0.08); border: 1px solid rgba(90,120,53,0.18);
+  border-radius: 14px; padding: 18px 20px; margin-bottom: 20px;
+}
+.bizum-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+.bizum-row:not(:last-child) { border-bottom: 1px solid rgba(90,120,53,0.1); }
+.bizum-key { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(28,46,12,0.38); }
+.bizum-val { font-size: 14px; font-weight: 700; color: #1c2e0c; font-family: 'DM Serif Display', serif; font-style: italic; }
+.bizum-copy {
+  font-size: 10px; color: #5a7835; background: none; border: none;
+  cursor: pointer; font-family: 'Raleway', sans-serif; font-weight: 700;
+  letter-spacing: 1px; text-decoration: underline; text-underline-offset: 2px;
+}
+.bizum-close {
+  display: block; width: 100%; padding: 15px; background: #1c2e0c;
+  border: none; border-radius: 14px; color: #e8c820;
+  font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s;
+}
+.bizum-close:hover { background: #111c06; }
+
+/* Date modal */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,25,8,0.65); backdrop-filter: blur(14px);
+  z-index: 100; align-items: flex-end; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal { background: #f0f1ea; border-radius: 28px; padding: 30px 28px 34px; width: 100%; max-width: 390px; box-shadow: 0 -8px 40px rgba(20,35,8,0.18); }
+.modal-title { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 26px; color: #1c2e0c; margin-bottom: 4px; }
+.modal-sub { font-size: 11px; color: rgba(28,46,12,0.35); margin-bottom: 22px; font-weight: 500; }
+.date-input { width: 100%; background: #fff; border: 1.5px solid rgba(90,120,53,0.2); border-radius: 14px; padding: 15px 16px; color: #1c2e0c; font-family: 'Raleway', sans-serif; font-size: 16px; font-weight: 600; outline: none; margin-bottom: 16px; transition: border 0.2s; box-shadow: 0 2px 8px rgba(30,55,10,0.06); color-scheme: light; }
+.date-input:focus { border-color: rgba(140,180,50,0.55); }
+.modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-cancel { padding: 15px; background: transparent; border: 1.5px solid rgba(28,46,12,0.12); border-radius: 14px; color: rgba(28,46,12,0.38); font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; }
+.btn-cancel:hover { border-color: rgba(28,46,12,0.25); color: rgba(28,46,12,0.7); }
+.btn-confirm { padding: 15px; background: #1c2e0c; border: none; border-radius: 14px; color: #e8c820; font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: all 0.2s; }
+.btn-confirm:hover { background: #111c06; }
+
+.toast { position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1c2e0c; color: #e8c820; padding: 13px 26px; border-radius: 30px; font-size: 12px; font-weight: 700; font-family: 'Raleway', sans-serif; letter-spacing: 0.5px; transition: transform 0.4s cubic-bezier(.34,1.56,.64,1); pointer-events: none; white-space: nowrap; z-index: 200; box-shadow: 0 8px 28px rgba(28,46,12,0.25); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="leaves-layer">
+    <svg width="100%" height="100%" viewBox="0 0 390 820" preserveAspectRatio="xMidYMid meet" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(-18, 30) rotate(-25)" opacity="0.07">
+        <path d="M30 120C10 90 5 45 20 15C25 5 45 5 50 15C65 45 60 90 30 120Z" fill="#3a5a18"/>
+        <path d="M30 120C30 80 30 40 20 15" stroke="#4a7025" stroke-width="1.2"/>
+        <path d="M30 80C22 65 18 45 20 15" stroke="#4a7025" stroke-width="0.6"/>
+        <path d="M30 80C38 65 42 45 50 15" stroke="#4a7025" stroke-width="0.6"/>
+      </g>
+      <g transform="translate(310, -10) rotate(15)" opacity="0.06">
+        <path d="M40 140C14 105 8 52 28 18C34 6 56 6 62 18C82 52 76 105 40 140Z" fill="#2a4810"/>
+        <path d="M40 140C40 95 40 48 28 18" stroke="#3a5820" stroke-width="1.2"/>
+        <path d="M40 95C28 75 22 50 28 18" stroke="#3a5820" stroke-width="0.6"/>
+        <path d="M40 95C52 75 58 50 62 18" stroke="#3a5820" stroke-width="0.6"/>
+      </g>
+      <g transform="translate(345, 40) rotate(-10)" opacity="0.05">
+        <path d="M20 70C7 53 4 26 14 9C17 3 28 3 31 9C41 26 38 53 20 70Z" fill="#2a4810"/>
+        <path d="M20 70C20 47 20 24 14 9" stroke="#3a5820" stroke-width="0.8"/>
+      </g>
+      <g transform="translate(-12, 310) rotate(20)" opacity="0.06">
+        <path d="M28 105C9 78 4 38 16 12C20 4 40 4 44 12C56 38 51 78 28 105Z" fill="#3a5818"/>
+        <path d="M28 105C28 70 28 35 16 12" stroke="#4a7025" stroke-width="1"/>
+        <path d="M28 72C20 57 16 37 16 12" stroke="#4a7025" stroke-width="0.5"/>
+        <path d="M28 72C36 57 40 37 44 12" stroke="#4a7025" stroke-width="0.5"/>
+      </g>
+      <g transform="translate(360, 290) rotate(-30)" opacity="0.065">
+        <path d="M25 95C8 71 3 35 13 11C17 3 38 3 42 11C52 35 47 71 25 95Z" fill="#2e4c14"/>
+        <path d="M25 95C25 63 25 31 13 11" stroke="#3e6020" stroke-width="1"/>
+        <path d="M25 65C17 51 13 34 13 11" stroke="#3e6020" stroke-width="0.5"/>
+        <path d="M25 65C33 51 37 34 42 11" stroke="#3e6020" stroke-width="0.5"/>
+      </g>
+      <g transform="translate(-20, 620) rotate(15)" opacity="0.065">
+        <path d="M35 130C12 97 6 47 22 15C27 5 53 5 58 15C74 47 68 97 35 130Z" fill="#344e14"/>
+        <path d="M35 130C35 88 35 43 22 15" stroke="#446020" stroke-width="1.2"/>
+        <path d="M35 90C24 70 20 46 22 15" stroke="#446020" stroke-width="0.6"/>
+        <path d="M35 90C46 70 50 46 58 15" stroke="#446020" stroke-width="0.6"/>
+      </g>
+      <g transform="translate(355, 680) rotate(-18)" opacity="0.06">
+        <path d="M28 108C9 80 4 38 17 12C21 4 40 4 44 12C57 38 52 80 28 108Z" fill="#2e4a14"/>
+        <path d="M28 108C28 72 28 36 17 12" stroke="#3e5e20" stroke-width="1"/>
+        <path d="M28 74C20 58 17 38 17 12" stroke="#3e5e20" stroke-width="0.5"/>
+        <path d="M28 74C36 58 39 38 44 12" stroke="#3e5e20" stroke-width="0.5"/>
+      </g>
+      <g transform="translate(140, 720) rotate(5)" opacity="0.04">
+        <path d="M55 170C18 127 8 62 32 20C40 6 80 6 88 20C112 62 102 127 55 170Z" fill="#2a4010"/>
+        <path d="M55 170C55 115 55 56 32 20" stroke="#3a5018" stroke-width="1.5"/>
+      </g>
+      <g transform="translate(170, 240) rotate(-40)" opacity="0.09">
+        <path d="M14 50C5 38 3 18 9 7C11 2 21 2 23 7C29 18 27 38 14 50Z" fill="#d4a810"/>
+        <path d="M14 50C14 33 14 15 9 7" stroke="#c89010" stroke-width="0.8"/>
+      </g>
+      <g transform="translate(230, 480) rotate(35)" opacity="0.08">
+        <path d="M12 44C4 33 2 15 8 6C10 2 19 2 21 6C27 15 25 33 12 44Z" fill="#c89810"/>
+        <path d="M12 44C12 29 12 14 8 6" stroke="#b88010" stroke-width="0.7"/>
+      </g>
+      <g transform="translate(80, 560) rotate(-20)" opacity="0.07">
+        <path d="M10 36C3 27 2 13 6 5C8 1 15 1 17 5C21 13 20 27 10 36Z" fill="#c89018"/>
+        <path d="M10 36C10 24 10 11 6 5" stroke="#b08010" stroke-width="0.6"/>
+      </g>
+      <g transform="translate(310, 430) rotate(50)" opacity="0.055">
+        <path d="M16 55C5 41 3 20 10 7C12 2 23 2 25 7C32 20 30 41 16 55Z" fill="#7a8a68"/>
+        <path d="M16 55C16 37 16 18 10 7" stroke="#8a9a78" stroke-width="0.7"/>
+      </g>
+      <g transform="translate(55, 420) rotate(-45)" opacity="0.06">
+        <path d="M13 44C4 33 2 16 8 6C10 1 20 1 22 6C28 16 26 33 13 44Z" fill="#6a7a58"/>
+        <path d="M13 44C13 29 13 14 8 6" stroke="#7a8a68" stroke-width="0.6"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="card-header">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="sun-blob"></div>
+    <div class="header-content">
+      <div class="location-row">
+        <div class="loc-dot"></div>
+        <div class="loc-text">Парк Турия · Валенсия</div>
+      </div>
+      <div class="brand">Yoga<span class="brand-amp"> &</span>You</div>
+      <div class="tagline-row">
+        <div class="tagline">Абонемент на занятия</div>
+        <div class="tagline-line"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accent-bar"></div>
+
+  <div class="card-body">
+
+    <div class="top-strip">
+      <div class="pills">
+        <div class="pill">4 занятия</div>
+        <div class="pill pill-outline">Суббота · 12:00</div>
+      </div>
+      <div class="price"><sup>€</sup>34</div>
+    </div>
+
+    <div class="field-label">Участник</div>
+    <div class="name-wrap">
+      <input type="text" id="client-name" placeholder="Ваше имя" maxlength="28">
+      <div class="edit-icon">✏️</div>
+    </div>
+
+    <div class="sess-header">
+      <div class="sess-label">Посещения</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="btn-client" onclick="setMode('client')">Клиент</button>
+        <button class="mode-btn" id="btn-instructor" onclick="setMode('instructor')">Инструктор</button>
+      </div>
+    </div>
+
+    <div class="sessions-grid" id="grid"></div>
+
+    <div class="card-bottom">
+      <div class="counter-wrap">
+        <div class="counter-num" id="counter">4</div>
+        <div class="counter-label">Осталось занятий</div>
+      </div>
+      <div>
+        <button class="reset-btn" id="reset-btn" onclick="resetAll()">↺ Сбросить</button>
+      </div>
+    </div>
+
+    <!-- Payment section -->
+    <div class="pay-section" id="pay-section">
+      <div class="pay-label">Способ оплаты</div>
+      <div class="pay-options">
+
+        <a class="pay-btn pay-revolut" id="pay-revolut" href="#" target="_blank" onclick="handlePay('revolut')">
+          <span class="pay-btn-icon">💳</span>
+          Revolut · €34
+        </a>
+
+        <button class="pay-btn pay-bizum" onclick="openBizum()">
+          <span class="pay-btn-icon">📱</span>
+          Bizum · €34
+        </button>
+
+        <button class="pay-btn pay-transfer" onclick="openBizum('transfer')">
+          <span class="pay-btn-icon">🏦</span>
+          Банковский перевод
+        </button>
+
+      </div>
+      <div class="pay-sub-text">Выбери удобный способ оплаты</div>
+    </div>
+
+    <!-- Paid badge -->
+    <div class="paid-badge" id="paid-badge">
+      <div class="paid-badge-inner">
+        <span style="font-size:18px">✅</span>
+        <span class="paid-badge-text">Abono pagado</span>
+      </div>
+      <div class="paid-badge-sub">¡Gracias! Te esperamos el sábado 🌿</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bizum / Transfer modal -->
+<div class="bizum-modal-overlay" id="bizum-modal">
+  <div class="bizum-modal">
+    <div class="bizum-title" id="bizum-title">Bizum</div>
+    <div class="bizum-sub" id="bizum-sub">Envía el pago al siguiente número</div>
+    <div class="bizum-info" id="bizum-info">
+      <!-- filled by JS -->
+    </div>
+    <button class="bizum-close" onclick="confirmBizumPay()">Ya he pagado · €34 ✓</button>
+  </div>
+</div>
+
+<!-- Date modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Занятие <span id="modal-num"></span></div>
+    <div class="modal-sub">Укажи дату посещения</div>
+    <input type="date" class="date-input" id="date-input">
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-confirm" onclick="confirmDate()">Сохранить ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const TOTAL = 4;
+  let sessions = Array(TOTAL).fill(null);
+  let mode = 'client';
+  let pendingIndex = -1;
+
+  // URL param for client name
+  const params = new URLSearchParams(window.location.search);
+  const clientParam = params.get('client') || '';
+  if (clientParam) document.getElementById('client-name').value = clientParam;
+
+  function fmt(iso) {
+    if (!iso) return '';
+    const [y,m,d] = iso.split('-');
+    return `${d}.${m}.${String(y).slice(2)}`;
+  }
+
+  function setPaid() {
+    document.getElementById('pay-section').style.display = 'none';
+    document.getElementById('paid-badge').style.display = 'block';
+    showToast('🌿 ¡Abono activado!');
+  }
+
+  // Revolut
+  function handlePay(type) {
+    const name = document.getElementById('client-name').value || 'Cliente';
+    const note = encodeURIComponent('Yoga Bon — ' + name);
+    const url = `https://revolut.me/marinabraslina?currency=EUR&amount=3400&note=${note}`;
+    window.open(url, '_blank');
+    setTimeout(() => {
+      if (confirm('¿El pago se ha completado? Pulsa OK para confirmar.')) setPaid();
+    }, 3000);
+    return false;
+  }
+
+  // Bizum / Transfer modal
+  function openBizum(type) {
+    const modal = document.getElementById('bizum-modal');
+    const info = document.getElementById('bizum-info');
+    const title = document.getElementById('bizum-title');
+    const sub = document.getElementById('bizum-sub');
+
+    if (type === 'transfer') {
+      title.textContent = 'Transferencia bancaria';
+      sub.textContent = 'Realiza la transferencia con los siguientes datos';
+      info.innerHTML = `
+        <div class="bizum-row">
+          <span class="bizum-key">Titular</span>
+          <span class="bizum-val">Marina Braslina</span>
+        </div>
+        <div class="bizum-row">
+          <span class="bizum-key">IBAN</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="bizum-val" style="font-size:13px">ES41 0182 6526 1602 0420 0935</span>
+            <button class="bizum-copy" onclick="copyText('ES4101826526160204200935')">Copiar</button>
+          </div>
+        </div>
+        <div class="bizum-row">
+          <span class="bizum-key">Concepto</span>
+          <span class="bizum-val">Yoga Bon</span>
+        </div>
+        <div class="bizum-row">
+          <span class="bizum-key">Importe</span>
+          <span class="bizum-val" style="color:#c8a010">€34</span>
+        </div>`;
+    } else {
+      title.textContent = 'Bizum';
+      sub.textContent = 'Envía €34 al siguiente número';
+      info.innerHTML = `
+        <div class="bizum-row">
+          <span class="bizum-key">Número</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="bizum-val">+371 299 555 94</span>
+            <button class="bizum-copy" onclick="copyText('+37129955594')">Copiar</button>
+          </div>
+        </div>
+        <div class="bizum-row">
+          <span class="bizum-key">Concepto</span>
+          <span class="bizum-val">Yoga Bon</span>
+        </div>
+        <div class="bizum-row">
+          <span class="bizum-key">Importe</span>
+          <span class="bizum-val" style="color:#c8a010">€34</span>
+        </div>`;
+    }
+    modal.classList.add('open');
+  }
+
+  function confirmBizumPay() {
+    document.getElementById('bizum-modal').classList.remove('open');
+    setPaid();
+  }
+
+  function copyText(txt) {
+    navigator.clipboard.writeText(txt).then(() => showToast('📋 Copiado!'));
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    const used = sessions.filter(s => s !== null).length;
+    for (let i = 0; i < TOTAL; i++) {
+      const isUsed = sessions[i] !== null;
+      const item = document.createElement('div');
+      item.className = 'session-item';
+      const circle = document.createElement('div');
+      circle.className = 'session-circle' + (isUsed ? ' used' : '');
+      const num = document.createElement('div');
+      num.className = 'session-num';
+      num.textContent = i + 1;
+      const check = document.createElement('div');
+      check.className = 'check-icon';
+      check.textContent = '✓';
+      circle.appendChild(num);
+      circle.appendChild(check);
+      const dateEl = document.createElement('div');
+      dateEl.className = 'session-date' + (isUsed ? ' has-date' : '');
+      dateEl.textContent = isUsed ? fmt(sessions[i]) : '';
+      item.appendChild(circle);
+      item.appendChild(dateEl);
+      item.onclick = () => handleTap(i);
+      grid.appendChild(item);
+    }
+    document.getElementById('counter').textContent = TOTAL - used;
+  }
+
+  function handleTap(i) {
+    const isUsed = sessions[i] !== null;
+    if (mode === 'client') {
+      const first = sessions.findIndex(s => s === null);
+      if (isUsed) showToast('Занятие уже посещено ✓');
+      else if (i === first) openModal(i);
+      else showToast('Отмечай по порядку 😊');
+    } else {
+      if (isUsed) { sessions[i] = null; showToast('Занятие снято ↩'); renderGrid(); }
+      else openModal(i);
+    }
+  }
+
+  function openModal(i) {
+    pendingIndex = i;
+    document.getElementById('modal-num').textContent = i + 1;
+    document.getElementById('date-input').value = new Date().toISOString().split('T')[0];
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    pendingIndex = -1;
+  }
+
+  function confirmDate() {
+    const val = document.getElementById('date-input').value;
+    if (!val) { showToast('Выбери дату!'); return; }
+    sessions[pendingIndex] = val;
+    closeModal();
+    renderGrid();
+    showToast('✓ Занятие отмечено!');
+  }
+
+  function resetAll() {
+    if (!confirm('Сбросить все занятия?')) return;
+    sessions = Array(TOTAL).fill(null);
+    document.getElementById('pay-section').style.display = 'block';
+    document.getElementById('paid-badge').style.display = 'none';
+    renderGrid();
+    showToast('Сброшено 🔄');
+  }
+
+  function setMode(m) {
+    mode = m;
+    document.getElementById('btn-client').classList.toggle('active', m === 'client');
+    document.getElementById('btn-instructor').classList.toggle('active', m === 'instructor');
+    document.getElementById('reset-btn').style.display = m === 'instructor' ? 'block' : 'none';
+    showToast(m === 'instructor' ? '🔓 Режим инструктора' : '🧘 Режим клиента');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+  document.getElementById('bizum-modal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
+
+  renderGrid();
+</script>
+</body>
+</html>
